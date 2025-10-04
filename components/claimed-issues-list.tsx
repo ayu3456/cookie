@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ExternalLink, GitPullRequest, Clock, CheckCircle2 } from "lucide-react"
-import type { ClaimedIssue } from "@/lib/types"
-import { markIssueCompleted } from "@/lib/actions/scan-repository"
+import type { ClaimedIssue } from "@/lib/mongodb/models"
+import { markIssueCompleted } from "@/lib/actions/scan-repository-mongodb"
 import { useToast } from "@/hooks/use-toast"
 import { useState } from "react"
 
@@ -56,7 +56,7 @@ export function ClaimedIssuesList({ issues }: ClaimedIssuesListProps) {
     return <Badge variant="outline">Active</Badge>
   }
 
-  const getDaysAgo = (date: string) => {
+  const getDaysAgo = (date: string | Date) => {
     const now = new Date()
     const claimed = new Date(date)
     const days = Math.floor((now.getTime() - claimed.getTime()) / (1000 * 60 * 60 * 24))
@@ -74,7 +74,7 @@ export function ClaimedIssuesList({ issues }: ClaimedIssuesListProps) {
   return (
     <div className="space-y-4">
       {issues.map((issue) => (
-        <div key={issue.id} className="rounded-lg border p-4">
+        <div key={issue._id?.toString() || issue.issue_number} className="rounded-lg border p-4">
           <div className="mb-3 flex items-start justify-between gap-4">
             <div className="flex-1">
               <div className="mb-2 flex items-center gap-2">
@@ -113,8 +113,8 @@ export function ClaimedIssuesList({ issues }: ClaimedIssuesListProps) {
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => handleMarkCompleted(issue.id)}
-                  disabled={loadingId === issue.id}
+                  onClick={() => handleMarkCompleted(issue._id?.toString() || '')}
+                  disabled={loadingId === issue._id?.toString()}
                 >
                   <CheckCircle2 className="mr-1 h-3 w-3" />
                   Complete

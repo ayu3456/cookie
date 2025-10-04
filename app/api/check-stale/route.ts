@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { checkStaleIssues } from "@/lib/actions/scan-repository"
+import { checkStaleIssues } from "@/lib/actions/scan-repository-mongodb"
 
 export async function POST() {
   try {

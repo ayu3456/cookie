@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScanRepositoryForm } from "@/components/scan-repository-form"
 import { ClaimedIssuesList } from "@/components/claimed-issues-list"
 import { CheckStaleButton } from "@/components/check-stale-button"
-import { safeQueryRepositories, safeQueryClaimedIssues } from "@/lib/supabase/safe-query"
+import { safeQueryRepositories, safeQueryClaimedIssues } from "@/lib/mongodb/safe-query"
 import { DatabaseSetupBanner } from "@/components/database-setup-banner"
 
 export default async function DashboardPage() {
@@ -59,8 +59,8 @@ export default async function DashboardPage() {
               <CardContent>
                 {repositories && repositories.length > 0 ? (
                   <div className="space-y-2">
-                    {repositories.map((repo) => (
-                      <div key={repo.id} className="flex items-center justify-between rounded-lg border p-3">
+                    {repositories.map((repo: any) => (
+                      <div key={repo._id?.toString() || repo.github_owner + '/' + repo.github_repo} className="flex items-center justify-between rounded-lg border p-3">
                         <div className="flex-1">
                           <p className="font-medium">
                             {repo.github_owner}/{repo.github_repo}

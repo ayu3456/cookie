@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { scanRepository } from "@/lib/actions/scan-repository"
+import { scanRepository } from "@/lib/actions/scan-repository-mongodb"
 
 export async function POST(request: NextRequest) {
   try {

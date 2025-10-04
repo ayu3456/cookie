@@ -237,7 +237,6 @@ export default function HowItWorksPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <ol className="ml-4 list-decimal space-y-2">
-              <li>Run the database setup scripts to create tables and seed sample data</li>
               <li>Visit the Dashboard to scan your first repository</li>
               <li>Monitor claimed issues and their progress</li>
               <li>Use the Notifications page to send nudges</li>

@@ -52,9 +52,6 @@ export default function RootLayout({
               <Button variant="ghost" asChild>
                 <Link href="/shame-board">Shame Board</Link>
               </Button>
-              <Button variant="ghost" asChild>
-                <Link href="/setup">Setup</Link>
-              </Button>
             </div>
           </div>
         </nav>

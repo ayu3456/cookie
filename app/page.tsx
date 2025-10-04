@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Cookie, Shield, Bell, TrendingUp } from "lucide-react"
 import Link from "next/link"
-import { safeQueryRepositories, safeQueryClaimedIssues } from "@/lib/supabase/safe-query"
+import { safeQueryRepositories, safeQueryClaimedIssues } from "@/lib/mongodb/safe-query"
 import { DatabaseSetupBanner } from "@/components/database-setup-banner"
 
 export default async function HomePage() {

@@ -3,7 +3,7 @@ import { NudgeableIssuesList } from "@/components/nudgeable-issues-list"
 import { AutoNudgeButton } from "@/components/auto-nudge-button"
 import { Badge } from "@/components/ui/badge"
 import { Bell } from "lucide-react"
-import { safeQueryClaimedIssues } from "@/lib/supabase/safe-query"
+import { safeQueryClaimedIssues } from "@/lib/mongodb/safe-query"
 import { DatabaseSetupBanner } from "@/components/database-setup-banner"
 
 export default async function NotificationsPage() {

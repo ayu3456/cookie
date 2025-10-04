@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { sendNudge, autoNudgeAll } from "@/lib/actions/nudge-system"
+import { sendNudge, autoNudgeAll } from "@/lib/actions/nudge-system-mongodb"
 
 export async function POST(request: NextRequest) {
   try {

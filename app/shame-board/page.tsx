@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase/server"
+import { safeQueryShameBoard } from "@/lib/mongodb/safe-query"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -7,71 +7,27 @@ import { Trophy, TrendingDown, Award, Flame } from "lucide-react"
 import { demoShameboardEntries } from "@/lib/demo-data"
 
 export default async function ShameBoardPage() {
-  const supabase = await createClient()
+  const { data: shameEntries, isDemoMode } = await safeQueryShameBoard()
 
-  let isDemoMode = false
-  let shameEntries = null
   let topPerformers = null
   let worstOffenders = null
 
-  try {
-    try {
-      const { data: shameData, error: shameError } = await supabase
-        .from("shame_board")
-        .select("*")
-        .order("reliability_score", { ascending: true })
-
-      if (shameData && !shameError) {
-        shameEntries = shameData
-        isDemoMode = false
-      }
-    } catch (fetchError) {
-      console.log("[v0] Database not available, using demo data")
-      isDemoMode = true
-      shameEntries = demoShameboardEntries
-    }
-
-    if (!isDemoMode) {
-      try {
-        const { data: topData } = await supabase
-          .from("shame_board")
-          .select("*")
-          .gte("total_completed", 1)
-          .order("reliability_score", { ascending: false })
-          .limit(5)
-
-        const { data: worstData } = await supabase
-          .from("shame_board")
-          .select("*")
-          .gte("total_abandoned", 2)
-          .order("reliability_score", { ascending: true })
-          .limit(5)
-
-        if (topData) topPerformers = topData
-        if (worstData) worstOffenders = worstData
-      } catch (fetchError) {
-        console.log("[v0] Could not fetch leaderboard data, using demo data")
-        isDemoMode = true
-        topPerformers = demoShameboardEntries
-          .filter((e) => e.total_completed >= 1)
-          .sort((a, b) => b.reliability_score - a.reliability_score)
-          .slice(0, 5)
-
-        worstOffenders = demoShameboardEntries
-          .filter((e) => e.total_abandoned >= 2)
-          .sort((a, b) => a.reliability_score - b.reliability_score)
-          .slice(0, 5)
-      }
-    }
-  } catch (error) {
-    console.log("[v0] Supabase client error, using demo data")
-    isDemoMode = true
-    shameEntries = demoShameboardEntries
+  if (!isDemoMode && shameEntries) {
+    topPerformers = shameEntries
+      .filter((e) => e.total_completed >= 1)
+      .sort((a, b) => b.reliability_score - a.reliability_score)
+      .slice(0, 5)
+    
+    worstOffenders = shameEntries
+      .filter((e) => e.total_abandoned >= 2)
+      .sort((a, b) => a.reliability_score - b.reliability_score)
+      .slice(0, 5)
+  } else {
+    // Use demo data
     topPerformers = demoShameboardEntries
       .filter((e) => e.total_completed >= 1)
       .sort((a, b) => b.reliability_score - a.reliability_score)
       .slice(0, 5)
-
     worstOffenders = demoShameboardEntries
       .filter((e) => e.total_abandoned >= 2)
       .sort((a, b) => a.reliability_score - b.reliability_score)
